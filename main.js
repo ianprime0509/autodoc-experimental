@@ -426,7 +426,7 @@
           const resolvedCategory = wasm_exports.categorize_decl(resolved, 0);
           switch (resolvedCategory) {
             case CAT_namespace:
-              if (wasm_exports.decl_field_count(resolved) > 0) {
+              if (!wasm_exports.decl_is_struct(resolved) || wasm_exports.decl_field_count(resolved) > 0) {
                 typesList.push(member);
               } else {
                 namespacesList.push(member);

@@ -580,6 +580,21 @@ export fn decl_file_path(decl_index: Decl.Index) String {
     return String.init(string_result.items);
 }
 
+export fn decl_is_struct(decl_index: Decl.Index) bool {
+    const decl = decl_index.get();
+    const ast = decl.file.get_ast();
+    switch (decl.categorize()) {
+        .namespace => |node| {
+            const node_tags = ast.nodes.items(.tag);
+            if (node_tags[node] == .root) return true;
+            const main_tokens = ast.nodes.items(.main_token);
+            const token_tags = ast.tokens.items(.tag);
+            return token_tags[main_tokens[node]] == .keyword_struct;
+        },
+        else => return false,
+    }
+}
+
 export fn decl_category_name(decl_index: Decl.Index) String {
     const decl = decl_index.get();
     const ast = decl.file.get_ast();
